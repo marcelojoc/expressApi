@@ -2,27 +2,19 @@ const express = require('express'); // requiero express
 const app = express();  // creo la aplicacion
 const port = 3000;  // indico el puerto
 
-app.get("/", (req, res) =>{
-  res.send("Hola mi server en Express");
-});
+const productsRouter = require('./products.router');
+const categoriesRouter = require('./categories.router');
+const usersRouter = require('./users.router');
 
-app.get("/nueva", (req, res) =>{
-  res.send("Hola esta es una nueva ruta");
-});
 
-app.get("/products", (req, res) =>{
-  res.json({name: 'producto1',
-            precio : '343434'});
-});
+  const router = express.Router();
+  app.use('/api/v1', router);
+  router.use('/products', productsRouter);
+  router.use('/categories', categoriesRouter);
+  router.use('/users', usersRouter);
 
-app.get('/products/:id', (req, res) => {
-  const { id } = req.params;
-  res.json({
-    id,
-    name: 'Product 2',
-    price: 2000,
-  });
-});
+
+
 
 
 
