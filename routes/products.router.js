@@ -24,11 +24,18 @@ router.get('/filter', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    id,
-    name: 'Product 2',
-    price: 2000,
-  });
+
+  if( id === '999'){
+    res.status(404).json({
+      message:'¡ elemento no encontrado'
+    });
+  }else{
+    res.status(201).json({
+      id,
+      name: 'Product 2',
+      price: 2000,
+    });
+  }
 });
 
 router.post('/', (req, res) => {
@@ -42,8 +49,8 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
   // products  pero como Patch para modificar datos pero pocos campos si no usaria put
-  const { id } = req.params;
-  const body = req.body;
+  const { id } = req.params; // recibo el id  del producto
+  const body = req.body; // y los campos a modificar
   res.json({
     message: 'update',
     data: body,
