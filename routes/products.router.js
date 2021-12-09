@@ -33,6 +33,7 @@ router.get('/:id', (req, res) => {
       id,
       name: 'Product 2',
       price: 2000
+
     });
   }
 });
@@ -48,8 +49,8 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
   // products  pero como Patch para modificar datos pero pocos campos si no usaria put
-  const { id } = req.params;
-  const body = req.body;
+  const { id } = req.params; // recibo el id  del producto
+  const body = req.body; // y los campos a modificar
   res.json({
     message: 'update',
     data: body,
