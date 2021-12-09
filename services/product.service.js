@@ -1,4 +1,5 @@
 const faker = require('faker'); // requiero faker  para  poblar  una bas e de datos local
+const boom = require('@hapi/boom'); // requiero boom para manejar  los  errores status  code
 
 class ProductsService {
   constructor() {
@@ -14,6 +15,7 @@ class ProductsService {
         name: faker.commerce.productName(),
         price: parseInt(faker.commerce.price(), 10),
         image: faker.image.imageUrl(),
+        isBlock: faker.datatype.boolean()
       });
     }
   }
@@ -47,20 +49,33 @@ class ProductsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this.products);
-      }, 5000);
+      }, 3000);
     });
   }
 
   findOne(id) {
     // busco por id  en el arreglo
-    const looo = this.createElement(); // forzando un error
-    return this.products.find(item => item.id === id);
+    //const looo = this.createElement(); // forzando un error
+    const product = this.products.find((item) => item.id === id);
+
+    if (!product) {
+      throw boom.notFound('Product not found id'); // error  de boom
+    } // si no entra al if  ejecuta  el retorno
+    // veremos un modo  de enviar otro tipo  de error
+    // añado un parametro mas a la carga  de productos  como isBlock
+    if(product.isBlock){
+      throw boom.forbidden('Product not found id'); // error  de boom
+
+    }
+      return product;
+
   }
 
   async update(id, changes) {
     const index = this.products.findIndex((item) => item.id === id);
     if (index === -1) {
-      throw new Error('product not found');
+      //throw new Error('product not found'); // aqui implemento boom
+      throw boom.notFound('Product not found'); // error  de boom
     }
     const product = this.products[index];
     this.products[index] = {
@@ -73,7 +88,8 @@ class ProductsService {
   async delete() {
     const index = this.products.findIndex((item) => item.id === id); // busco el id  enviado
     if (index === -1) {
-      throw new Error('product not found');
+      //throw new Error('product not found');
+      throw boom.notFound('Product not found');
     }
     this.products.splice(index, 1);
     return { id };
