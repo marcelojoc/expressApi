@@ -5,6 +5,8 @@ const ProductsService = require('./../services/product.service'); // importo el 
 const router = express.Router();
 const service = new ProductsService();  //instancio esta clase
 
+
+
 router.get('/', async(req, res) => {
   const products = await service.find();
   res.json(products);
@@ -13,6 +15,19 @@ router.get('/', async(req, res) => {
 router.get('/filter', async(req, res) => {
   res.send('Yo soy un filter');
 });
+
+
+
+/**
+ * @api {get} /user/:id Request User information
+ * @apiName GetUser
+ * @apiGroup User
+ *@apiVersion 0.1.0
+ * @apiParam {Number} id User's unique ID.
+ *
+ * @apiSuccess {String} firstname Firstname of the User.
+ * @apiSuccess {String} lastname  Lastname of the User.
+ */
 
 router.get('/:id', async(req, res, next) => {
   // const { id } = req.params;
@@ -23,7 +38,7 @@ router.get('/:id', async(req, res, next) => {
     const { id } = req.params;
     const product = await service.findOne(id);
     res.json(product);
-    
+
   } catch (error) {
     next(error);
   }
